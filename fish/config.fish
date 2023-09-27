@@ -26,7 +26,7 @@
 
 status --is-interactive; and source (jump shell fish | source)
 
-thefuck --alias | source
+# thefuck --alias | source
 starship init fish | source
 alias cp "/usr/local/bin/cpg -g"
 alias mv "/usr/local/bin/mvg -g"

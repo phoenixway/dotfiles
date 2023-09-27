@@ -43,119 +43,122 @@ call plug#begin('~/.vim/plugged')
   Plug 'rstacruz/vim-closer'
   " Improved motion in Vim
   Plug 'easymotion/vim-easymotion'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'tmhedberg/SimpylFold'
   Plug 'vim-scripts/indentpython.vim'
   Plug 'Valloric/YouCompleteMe'
-  Plug 'rakr/vim-one'
-  Plug 'neovim/nvim-lspconfig' 
-  Plug 'hrsh7th/cmp-nvim-lsp' 
-  Plug 'hrsh7th/cmp-buffer' 
-  Plug 'hrsh7th/cmp-path' 
-  Plug 'hrsh7th/cmp-cmdline' 
-  Plug 'hrsh7th/nvim-cmp' 
-  " For vsnip users. 
-  Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/vim-vsnip' 
+  " Plug 'rakr/vim-one'
+  " Plug 'neovim/nvim-lspconfig' 
+  " Plug 'hrsh7th/cmp-nvim-lsp' 
+  " Plug 'hrsh7th/cmp-buffer' 
+  " Plug 'hrsh7th/cmp-path' 
+  " Plug 'hrsh7th/cmp-cmdline' 
+  " Plug 'hrsh7th/nvim-cmp' 
+  " " For vsnip users. 
+  " Plug 'hrsh7th/cmp-vsnip'
+  " Plug 'hrsh7th/vim-vsnip' 
   " For luasnip users. " 
-  Plug 'L3MON4D3/LuaSnip' 
-  Plug 'saadparwaiz1/cmp_luasnip'
-  Plug 'SirVer/ultisnips'
-  Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-  Plug 'dcampos/nvim-snippy'
-  Plug 'dcampos/cmp-snippy'
+  " Plug 'L3MON4D3/LuaSnip' 
+  " Plug 'saadparwaiz1/cmp_luasnip'
+  " Plug 'SirVer/ultisnips'
+  " Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+  " Plug 'dcampos/nvim-snippy'
+  " Plug 'dcampos/cmp-snippy'
 
 call plug#end()
-lua <<EOF
-  -- Set up nvim-cmp.
-  local cmp = require'cmp'
+" lua <<EOF
+"   -- Set up nvim-cmp.
+"   local cmp = require'cmp'
+"
+"   cmp.setup({
+"     snippet = {
+"       -- REQUIRED - you must specify a snippet engine
+"       expand = function(args)
+"         vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+"         -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+"         -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+"         -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+"       end,
+"     },
+"     window = {
+"       completion = cmp.config.window.bordered(),
+"       documentation = cmp.config.window.bordered(),
+"     },
+"     mapping = cmp.mapping.preset.insert({
+"       ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+"       ['<C-f>'] = cmp.mapping.scroll_docs(4),
+"       ['<C-Space>'] = cmp.mapping.complete(),
+"       ['<C-e>'] = cmp.mapping.abort(),
+"       ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+"     }),
+"     sources = cmp.config.sources({
+"       { name = 'nvim_lsp' },
+"       { name = 'vsnip' }, -- For vsnip users.
+"       -- { name = 'luasnip' }, -- For luasnip users.
+"       -- { name = 'ultisnips' }, -- For ultisnips users.
+"       -- { name = 'snippy' }, -- For snippy users.
+"     }, {
+"       { name = 'buffer' },
+"     })
+"   })
+"
+"   -- Set configuration for specific filetype.
+"   cmp.setup.filetype('gitcommit', {
+"     sources = cmp.config.sources({
+"       { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+"     }, {
+"       { name = 'buffer' },
+"     })
+"   })
+"
+"   -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+"   cmp.setup.cmdline({ '/', '?' }, {
+"     mapping = cmp.mapping.preset.cmdline(),
+"     sources = {
+"       { name = 'buffer' }
+"     }
+"   })
+"
+"   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+"   cmp.setup.cmdline(':', {
+"     mapping = cmp.mapping.preset.cmdline(),
+"     sources = cmp.config.sources({
+"       { name = 'path' }
+"     }, {
+"       { name = 'cmdline' }
+"     })
+"   })
+"
+"   -- Set up lspconfig.
+"   local capabilities = require('cmp_nvim_lsp').default_capabilities()
+"   -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+"   -- require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
+"   --   capabilities = capabilities
+"   -- }
+" EOF
 
-  cmp.setup({
-    snippet = {
-      -- REQUIRED - you must specify a snippet engine
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-      end,
-    },
-    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-    })
-  })
+set clipboard+=unnamedplus
+set linespace=-2
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-
-  -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  -- require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
-  --   capabilities = capabilities
-  -- }
-EOF
-
-set clipboard=unnamed
+set guifont=MesloLGM\ Nerd\ Font\ Mono:h11.5
+let g:neovide_scale_factor = 1.0
+let g:neovide_floating_blur_amount_x = 2.0
+let g:neovide_floating_blur_amount_y = 2.0
+let g:neovide_transparency = 0.98
+let g:neovide_scroll_animation_length = 0.3
+let g:neovide_theme = 'auto'
+let g:neovide_remember_window_size = v:true
+let g:neovide_cursor_animation_length = 0.01
+let g:neovide_cursor_trail_size = 0
+let g:neovide_cursor_antialiasing = v:true
+" vim.o.guifont = "Source Code Pro:h11" -- text below applies for VimScript
 
 set expandtab
 set autochdir
 set softtabstop=2
 set shiftwidth=2
+set relativenumber
 
-" === NERDTree === "
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeDirArrowExpandable = '⬏'
-let g:NERDTreeDirArrowCollapsible = '⬎'
-let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-autocmd BufReadPost *
-            \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-            \ exe "normal g`\"" |
-            \ endif
 let g:vim_markdown_conceal = 1
 
 autocmd Bufread *.md setlocal conceallevel=2
@@ -169,7 +172,7 @@ let g:mkdx#settings     = { 'highlight': { 'enable': 1 },
                         \ 'links': { 'external': { 'enable': 1 } },
                         \ 'toc': { 'text': 'Table of Contents', 'update_on_write': 1 },
                         \ 'fold': { 'enable': 1 } }
-let g:polyglot_disabled = ['markdown'] " for vim-polyglot users, it loads Plasticboy's markdown
+" let g:polyglot_disabled = ['markdown'] " for vim-polyglot users, it loads Plasticboy's markdown
                                        " plugin which unfortunately interferes with mkdx list indentation.
 
 " === Search === "
@@ -206,7 +209,6 @@ let g:ycm_autoclose_preview_window_after_completion=1
 set autoindent
 " expand tabs into spaces
 set expandtab
-" when using the >> or << commands, shift lines by 4 spaces
 set shiftwidth=4
 " show a visual line under the cursor's current line
 set cursorline
@@ -214,12 +216,11 @@ set cursorline
 set showmatch
 " enable all Python syntax highlighting features
 let python_highlight_all = 1
-" ===========================================
+"===========================================
 
-let NERDTreeQuitOnOpen=0
 set nu
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 set completeopt=menu,menuone,noselect 
 set signcolumn=yes
@@ -231,33 +232,35 @@ let mapleader=" "
 
 map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-nnoremap <C-t> :NvimTreeToggle %:p:h<CR>
+" nnoremap <C-t> :NvimTreeToggle %:p:h<CR>
+nnoremap <c-t>  <c-u>
 nnoremap <C-s> :w<CR><CR>
-inoremap <C-s> <ESC>:w<CR><CR>
+inoremap <C-s> <ESC>:w<CR>li
 nnoremap <C-q> :q<CR>
 " nnoremap <C-b> :Telescope scope buffers<CR>
 nnoremap <C-o> :Telescope find_files search_dirs={"~/studio"}<CR>
 " nnoremap <C-a> <cmd>lua require('telescope.builtin').find_files( { cwd = vim.fn.expand('%:p:h') })<cr>
 "
-inoremap jj <esc>
 nnoremap ; :
 nnoremap : ;
-nnoremap <c-left> :bprev<CR>
+" inoremap <leader>k <c-u>
+" inoremap <leader>j <c-d>
+" nnoremap <c-left> :bprev<CR>
 nnoremap <c-a-w> :bd<CR>
 inoremap <ESC> <ESC>:set iminsert=0<CR>
 nnoremap <ESC> <ESC>:set iminsert=0<CR>
 " inoremap <left> :bprev<CR>
-nnoremap <c-right> :bnext<CR>
+" nnoremap <c-right> :bnext<CR>
 " inoremap <right> :bnext<CR>
 " nnoremap z :
 
-nnoremap <L-j> :bprev<CR>
-nnoremap <L-k> :bnext<CR>
+" nnoremap <L-j> :bprev<CR>
+" nnoremap <L-k> :bnext<CR>
 nnoremap <silent> zj o<Esc>k
 nnoremap <silent> zk O<Esc>j
 
-map <Enter> o<ESC>
-map <S-Enter> O<ESC>
+" nnoremap <Enter> o<ESC>
+" map <S-Enter> O<ESC>
 
 noremap <c-k> :m -2<CR>
 noremap <c-j> :m +1<CR>
@@ -270,6 +273,7 @@ nmap <C-DOWN> :m+1<CR>
 
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 "=================================================================================================================
@@ -326,89 +330,157 @@ let g:airline_symbols.linenr = ''
 set cmdheight=0
 
 set keymap=ukrainian-jcuken
-inoremap <c-l> <c-^>
 " inoremap / .
 " inoremap . /
 " inoremap ? ,
 " inoremap , ?
 set iminsert=1 imsearch=0
-
 " set foldcolumn=0
-set foldlevelstart=0
-set foldmarker=\ {{{,\ }}}
-
-" set fillchars=fold:━
-" let g:crease_foldtext = { 'default': '%f%f┫ %t%{CreaseChanged()} ┣%=┫ %l lines ┣%f%f' }
-
-" function! CreaseChanged()
-"     return gitgutter#fold#is_changed() ? ' *' : ''
-" endfunction
-
-" set fillchars=fold:\ 
+" set foldlevelstart=0
+" set foldmarker=\ {{{,\ }}}
+" let g:fold_label = ' '
+" let g:commented_label = ' '
+" let g:lines_label = 'lines'
+" let g:modified_label = ' ' " alt : ' '
 "
-" function! FoldIsCommented()  
-"   return luaeval("require('fold').foldIsCommented()")
-" endfunction  
+" let g:foldtext_stop_words = [
+"       \ '\^function',
+"       \ '!',
+"       \ 'abort',
+"       \ ]
 "
-" function! IsMod()
-"   if exists('g:loaded_gitgutter')
-"     return gitgutter#fold#is_changed() ? g:modified_label  : ' '
-"   else
-"     return ''
-"   endif
-" endfunction 
-"
-" function! CreaseIndent() abort   
-"   let fs = nextnonblank(v:foldstart)    
-"   let line = substitute(getline(fs), '\t', repeat(' ', &tabstop), 'g')  
-"   let foldLevelStr = repeat(' ', match(line,'\S'))  
-"   return foldLevelStr    
-" endfunction    
-"
-"
-" function! CountFoldText() abort   
-"   let foldCnt = luaeval("require('fold').countChildFolds()")
-"   if l:foldCnt < 0 
-"     return '' 
-"   endif
-"   return l:foldCnt == 0 ? '' : '' . l:foldCnt . " " . g:fold_label . ' · '
-" endfunction
-"
-" function! Cmmtd() abort 
-"   return FoldIsCommented() ? g:commented_label : ''
-" endfunction 
-"
-" function! FoldTxt() abort 
-"   return trim(substitute(
-" 	\ getline(v:foldstart),
-" 	\ '\V\C'
-" 	\ . join(split(&commentstring, '%s'), '\|') . '\|'
-" 	\ . join(split(&foldmarker, ','), '\d\?\|') . '\|'
-" 	\ . join(g:foldtext_stop_words, '\|') . '\|',
-" 	\ '',
-" 	\ 'g'
-" 	\ ))
-" endfunction 
-"
-
-let g:fold_label = ' '
-let g:commented_label = ' '
-let g:lines_label = 'lines'
-let g:modified_label = ' ' " alt : ' '
-
-let g:foldtext_stop_words = [
-      \ '\^function',
-      \ '!',
-      \ 'abort',
-      \ ]
-
-let g:crease_foldtext = {  
-      \ 'default': '%{CreaseIndent()}%{FoldTxt()} %{IsMod()} %{Cmmtd()} %= %{CountFoldText()}%l '.g:lines_label.' %f%f%f%f',
-      \}
-"--------------------------------------------------------------------
+" let g:crease_foldtext = {  
+"       \ 'default': '%{CreaseIndent()}%{FoldTxt()} %{IsMod()} %{Cmmtd()} %= %{CountFoldText()}%l '.g:lines_label.' %f%f%f%f',
+"       \}
+" "--------------------------------------------------------------------
 " set nocompatible 
 " if has("autocmd") 
 "     filetype plugin indent on 
 " endif
 " autocmd FileType markdown set foldexpr=NestedMarkdownFolds()
+" let g:vim_markdown_override_foldtext = 0
+" let g:vim_markdown_folding_level = 1
+set lazyredraw   " don't redraw everytime
+set synmaxcol=128  " avoid slow rendering for long lines
+syntax sync minlines=64  " faster syntax hl
+" ----------------------------------------------------------------------
+" g; go to last change - https://vimhelp.org/motion.txt.html#g%3B 
+nmap g; u<C-r>
+nmap gt :bnext<CR>
+nnoremap gt :bnext<CR>
+nmap gT :BufferLineCyclePrev<cr>
+" nnoremap g :BufferLineCyclePrev<CR>
+nnoremap gT :BufferLineCyclePrev<CR>
+nnoremap F3 :Hardtime toggle<CR>
 
+" nnoremap gb :e#<CR>
+inoremap № #
+" пссinoremap ? ,
+
+" nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+" nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+map j gj
+:map k gk
+
+" inoremap ? ,
+set backspace=indent,eol,start
+imap <C-D> X<Esc>lbce
+imap <c-H> <c-W>
+nmap [ { 
+nmap ] }
+" nmap j gj 
+" nmap k gk
+let g:better_escape_shortcut = 'jj'
+inoremap jj <esc>
+inoremap qq <esc>
+let g:minimap_width = 20
+let g:minimap_auto_start = 1
+let g:minimap_auto_start_win_enter = 1
+nnoremap <leader>g  :lua require('telescope.builtin').find_files( { cwd = vim.fn.expand('/home/roman/studio'), default_text=vim.fn.expand("<cfile>")})<cr>
+" nnoremap <leader>g  :execute 'Telescope find_files cwd='~/studio' default_text=' . "" . expand('<cword>')<cr>
+nnoremap <leader>h  :execute 'Telescope heading'<cr>
+
+hi default UfoFoldedFg guifg=Normal.foreground
+hi default UfoFoldedBg guibg=Folded.background
+hi default link UfoPreviewSbar PmenuSbar
+hi default link UfoPreviewThumb PmenuThumb
+hi default link UfoPreviewWinBar UfoFoldedBg
+hi default link UfoPreviewCursorLine Visual
+hi default link UfoFoldedEllipsis Comment
+hi default link UfoCursorFoldedLine CursorLine
+let g:markdown_folding = 1
+let g:airline#extensions#keymap#enabled = 1
+let g:airline#extensions#keymap#short_codes = {'ukrainian-jcuken': 'ua'}
+let g:airline#extensions#keymap#label = 'Lang:'
+tnoremap <Esc> <C-\><C-n>
+" autocmd! User GoyoEnter Limelight
+" autocmd! User GoyoLeave Limelight!
+"
+" let g:pencil#wrapModeDefault = 'soft'   " default is 'hard'
+" let g:pencil#autoformat = 1      " 0=disable, 1=enable (def)
+" let g:pencil#map#suspend_af = 'K'   " default is no mapping
+"
+" augroup pencil
+"   autocmd!
+"   autocmd FileType markdown,mkd call pencil#init()
+"   autocmd FileType text         call pencil#init({'wrap': 'hard'})
+" augroup END
+
+function! s:goyo_leave()
+    TwilightDisable
+endfunction
+
+function! s:goyo_enter()
+  " FocusDisable
+  set nofoldenable
+  set nonu
+  " TwilightEnable
+endfunction
+
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+nnoremap <leader>l :Goyo<cr>
+
+nnoremap x d
+xnoremap x d
+
+nnoremap xx dd
+nnoremap X D
+" imap <silent> <c-z> <c-^>
+" imap <silent> <c-z> <c-^>
+inoremap <c-l> <c-^> 
+let g:wiki_root = '/home/roman/studio'
+vmap <C-c> "+yi
+vmap <C-x> "+c
+vmap <C-v> c<ESC>"+p
+imap <C-v> <C-r><C-o>+
+
+" autocmd VimLeavePre * call CleanupStuff() "from docs
+
+" I added the dummy cleanup function example
+" func! CleanupStuff() abort
+"     call system('/home/roman/studio/unordered/scripts/to_gdrive.sh')
+" nnoremap x "_x
+" nnoremap d "_d
+" nnoremap D "_D
+" vnoremap d "_d
+"
+" nnoremap <leader>d ""d
+" nnoremap <leader>D ""D
+" vnoremap <leader>d ""d
+
+nnoremap <leader>d "_d
+xnoremap <leader>d "_d
+xnoremap <leader>p "_dP
+
+inoremap <C-Z> <C-O>u
+inoremap <C-Y> <C-O><C-R>
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_install_gadgets = [ 'debugpy' ]

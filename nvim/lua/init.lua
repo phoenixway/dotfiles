@@ -3,7 +3,9 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.o.showtabline = 2
 vim.opt.termguicolors = true
--- local cmp = require('cmp') 
+
+vim.keymap.set("n", "<C-_>", function() require('Comment.api').toggle.linewise.current() end, { noremap = true, silent = true })
+
 -- cmp.setup
 -- ({
 --     -- You must set mapping if you want. 
@@ -30,3 +32,4 @@ vim.opt.termguicolors = true
 -- local builtin = require("telescope.builtin")
 -- local utils = require("telescope.utils")
 -- ["<leader>fq"] = { function() builtin.find_files({ cwd = utils.buffer_dir() }) end, desc = "Find files in cwd" }
+--
