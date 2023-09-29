@@ -144,7 +144,7 @@ set guifont=MesloLGM\ Nerd\ Font\ Mono:h11.5
 let g:neovide_scale_factor = 1.0
 let g:neovide_floating_blur_amount_x = 2.0
 let g:neovide_floating_blur_amount_y = 2.0
-let g:neovide_transparency = 0.98
+let g:neovide_transparency = 0.93
 let g:neovide_scroll_animation_length = 0.3
 let g:neovide_theme = 'auto'
 let g:neovide_remember_window_size = v:true
@@ -294,8 +294,10 @@ let hour = strftime("%H")
 if 6 <= hour && hour < 18
     set background=light
     colorscheme catppuccin
+     if match(&runtimepath, 'airline') != -1
+        AirlineTheme cobalt2
+    endif   
     let g:airline_theme = "cobalt2"
-    AirlineTheme cobalt2
  else
     set background=dark
     let g:airline_theme='tomorrow'
@@ -484,3 +486,6 @@ nmap <Leader>di <Plug>VimspectorBalloonEval
 xmap <Leader>di <Plug>VimspectorBalloonEval
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'debugpy' ]
+
+noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
+noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>

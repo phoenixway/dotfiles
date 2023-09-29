@@ -51,6 +51,73 @@ return {
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
         -- enabled = false,
+        opts = {
+            autotag = { enable = true },
+            context_commentstring = { enable = true, enable_autocmd = false },
+            highlight = {
+                enable = true,
+                disable = function(_, bufnr) return vim.api.nvim_buf_line_count(bufnr) > 10000 end,
+            },
+            incremental_selection = { enable = true },
+            indent = { enable = true },
+            textobjects = {
+                select = {
+                    enable = true,
+                    lookahead = true,
+                    keymaps = {
+                        ["ak"] = { query = "@block.outer", desc = "around block" },
+                        ["ik"] = { query = "@block.inner", desc = "inside block" },
+                        ["ac"] = { query = "@class.outer", desc = "around class" },
+                        ["ic"] = { query = "@class.inner", desc = "inside class" },
+                        ["a?"] = { query = "@conditional.outer", desc = "around conditional" },
+                        ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
+                        ["af"] = { query = "@function.outer", desc = "around function " },
+                        ["if"] = { query = "@function.inner", desc = "inside function " },
+                        ["al"] = { query = "@loop.outer", desc = "around loop" },
+                        ["il"] = { query = "@loop.inner", desc = "inside loop" },
+                        ["aa"] = { query = "@parameter.outer", desc = "around argument" },
+                        ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
+                    },
+                },
+                move = {
+                    enable = true,
+                    set_jumps = true,
+                    goto_next_start = {
+                        ["]k"] = { query = "@block.outer", desc = "Next block start" },
+                        ["]f"] = { query = "@function.outer", desc = "Next function start" },
+                        ["]a"] = { query = "@parameter.inner", desc = "Next argument start" },
+                    },
+                    goto_next_end = {
+                        ["]K"] = { query = "@block.outer", desc = "Next block end" },
+                        ["]F"] = { query = "@function.outer", desc = "Next function end" },
+                        ["]A"] = { query = "@parameter.inner", desc = "Next argument end" },
+                    },
+                    goto_previous_start = {
+                        ["[k"] = { query = "@block.outer", desc = "Previous block start" },
+                        ["[f"] = { query = "@function.outer", desc = "Previous function start" },
+                        ["[a"] = { query = "@parameter.inner", desc = "Previous argument start" },
+                    },
+                    goto_previous_end = {
+                        ["[K"] = { query = "@block.outer", desc = "Previous block end" },
+                        ["[F"] = { query = "@function.outer", desc = "Previous function end" },
+                        ["[A"] = { query = "@parameter.inner", desc = "Previous argument end" },
+                    },
+                },
+                swap = {
+                    enable = true,
+                    swap_next = {
+                        [">K"] = { query = "@block.outer", desc = "Swap next block" },
+                        [">F"] = { query = "@function.outer", desc = "Swap next function" },
+                        [">A"] = { query = "@parameter.inner", desc = "Swap next argument" },
+                    },
+                    swap_previous = {
+                        ["<K"] = { query = "@block.outer", desc = "Swap previous block" },
+                        ["<F"] = { query = "@function.outer", desc = "Swap previous function" },
+                        ["<A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+                    },
+                },
+            },
+        }
     },
     {
         'goolord/alpha-nvim',
@@ -275,10 +342,10 @@ return {
         'scr1pt0r/crease.vim',
         enabled = false,
     },
-    -- { 'masukomi/vim-markdown-folding' },
-    { 'Konfekt/FastFold' },
+    -- { 'masukomi/vim-own-folding' },
+    -- { 'Konfekt/FastFold' },
     { 'zhimsel/vim-stay' },
-    { 'Jorengarenar/vim-syntaxMarkerFold' },
+    -- { 'Jorengarenar/vim-syntaxMarkerFold' },
     {
         'wellle/context.vim',
         enabled = false,
@@ -339,6 +406,10 @@ return {
             -- provider_selector = function(bufnr, filetype, buftype)
             --   return { "treesitter", "indent" }
             -- end,
+            -- provider_selector = function(_, filetype, buftype)
+            --     return (filetype == "" or buftype == "nofile") and "indent" -- only use indent until a file is opened
+            --         or { "treesitter", "indent" }                           -- if file opened, try to use treesitter if available
+            -- end,
             open_fold_hl_timeout = 400,
             close_fold_kinds = { "imports", "comment" },
             preview = {
@@ -357,6 +428,7 @@ return {
         },
         init = function()
             vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+            -- vim.o.fillchars = [[eob: ,fold: ,foldopen:▾,foldsep: ,foldclose:▸]]
             vim.o.foldcolumn = "1" -- '0' is not bad
             vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
             vim.o.foldlevelstart = 99
@@ -420,9 +492,19 @@ return {
             require("statuscol").setup({
                 relculright = true,
                 segments = {
-                    { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
-                    { text = { "%s" },                  click = "v:lua.ScSa" },
-                    { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }
+                    { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
+                    -- {
+                    --     sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = true },
+                    --     click = "v:lua.ScSa"
+                    -- },
+                    -- {
+                    --     -- sign = { name = { "Diagnostic" }, maxwidth = 2, colwidth = 1, auto = true },
+                    --     sign = { name = { "Diagnostic" } },
+                    --     click = "v:lua.ScSa"
+                    -- },
+                    -- { text = { "%s" },                  click = "v:lua.ScSa" },
+                    { text = { builtin.foldfunc },      colwidth = 2,        click = "v:lua.ScFa" },
+
                 }
             })
         end,
@@ -567,4 +649,100 @@ return {
     { 'mfussenegger/nvim-dap' },
     { 'mfussenegger/nvim-dap-python' },
     { 'rcarriga/nvim-dap-ui' },
+    { 'nvim-lua/popup.nvim' },
+    { 'theHamsta/nvim-dap-virtual-text' },
+    {
+        'linrongbin16/lsp-progress.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('lsp-progress').setup()
+        end
+    },
+    {
+        "folke/trouble.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        },
+    },
+    { "rcarriga/nvim-dap-ui",  dependencies = { "mfussenegger/nvim-dap" } },
+    {
+        "folke/edgy.nvim",
+        event = "VeryLazy",
+        init = function()
+            vim.opt.laststatus = 3
+            vim.opt.splitkeep = "screen"
+        end,
+        opts = {
+        }
+    },
+    { 'echasnovski/mini.nvim', version = false },
+    -- {
+    --     'karb94/neoscroll.nvim',
+    --     opts = {
+    --         -- All these keys will be mapped to their corresponding default scrolling animation
+    --         mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>',
+    --             '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
+    --         hide_cursor = true,          -- Hide cursor while scrolling
+    --         stop_eof = true,             -- Stop at <EOF> when scrolling downwards
+    --         respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+    --         cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+    --         easing_function = nil,       -- Default easing function
+    --         pre_hook = nil,              -- Function to run before the scrolling animation starts
+    --         post_hook = nil,             -- Function to run after the scrolling animation ends
+    --         performance_mode = false,    -- Disable "Performance Mode" on all buffers.
+    --     },
+    -- },
+    -- { "lukas-reineke/virt-column.nvim", opts = {} },
+    {
+        "danielfalk/smart-open.nvim",
+        config = function()
+            require("telescope").load_extension("smart_open")
+            vim.keymap.set("n", "<leader><leader>", function()
+                require("telescope").extensions.smart_open.smart_open()
+            end, { noremap = true, silent = true })
+        end,
+        dependencies = {
+            "kkharji/sqlite.lua",
+            -- Only required if using match_algorithm fzf
+            { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+            -- Optional.  If installed, native fzy will be used when match_algorithm is fzy
+            { "nvim-telescope/telescope-fzy-native.nvim" },
+        },
+    },
+    {
+        'lewis6991/satellite.nvim',
+        opts = {},
+    },
+    {
+        'yuttie/comfortable-motion.vim',
+    },
+    --     {
+    --     'petertriho/nvim-scrollbar' ,
+    --     dependencies = {'kevinhwang91/nvim-hlslens'},
+    --     config = function(_, opts)
+    --         require("scrollbar").setup(opts)
+    --
+    --     end,
+    -- },
+    -- {
+    --     "kevinhwang91/nvim-hlslens",
+    --     config = function(_)
+    --         require("hlslens").setup({
+    --             build_position_cb = function(plist, _, _, _)
+    --                 require("scrollbar.handlers.search").handler.show(plist.start_pos)
+    --             end,
+    --         })
+    --
+    --         vim.cmd([[
+    --             augroup scrollbar_search_hide
+    --                 autocmd!
+    --                 autocmd CmdlineLeave : lua require('scrollbar.handlers.search').handler.hide()
+    --             augroup END
+    -- ]])
+    --     end,
+    -- }
+
 }

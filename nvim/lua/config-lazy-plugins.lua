@@ -30,21 +30,21 @@ if not status_ok then
 end
 local setup = {
     plugins = {
-        marks = true,         -- shows a list of your marks on ' and `
-        registers = true,     -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+        marks = true,         
+        registers = true,     
         spelling = {
-            enabled = true,   -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-            suggestions = 20, -- how many suggestions should be shown in the list?
+            enabled = true,   
+            suggestions = 20, 
         },
     }
 }
 local opts = {
-    mode = "n",     -- NORMAL mode
+    mode = "n",
     prefix = "<leader>",
-    buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true,  -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true,  -- use `nowait` when creating keymaps
+    buffer = nil,
+    silent = true,
+    noremap = true,
+    nowait = true,
 }
 
 local mappings = {
@@ -56,7 +56,6 @@ local mappings = {
     ["q"] = { "<cmd>wqall!<CR>", "Quit" },                         -- Quit Neovim after saving the file
     ["r"] = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Reformat Code" },
     ["w"] = { "<cmd>wa!<CR>", "Save all" },                        -- Save current file -- Language Support
-    ["t"] = { "<cmd>ToggleTerm direction=float<CR>", "Terminal" }, -- Save current file -- Language Support
     t = {
         name = "Terminal",
         n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },          -- Node Terminal
@@ -96,7 +95,7 @@ which_key.setup(setup)
 which_key.register(mappings, opts)
 ----------------------------------------------------------------------------
 require("mason").setup({
-    PATH = "prepend", -- "skip" seems to cause the spawning error
+    PATH = "prepend",
 })
 require("mason-lspconfig").setup {
     ensure_installed = {
@@ -121,7 +120,7 @@ end
 require("nvim-tree").setup({
     sort_by = "case_sensitive",
     view = {
-        width = 30,
+        width = 50,
     },
     renderer = {
         group_empty = true,
@@ -147,30 +146,23 @@ telescope.load_extension('sessions_picker')
 -------------------------------------------------------------------
 require("notify")("Hi, bro!")
 -------------------------------------------------------------------
-vim.o.foldcolumn = '1' -- '0' is not bad
-vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-vim.o.foldmethod = 'expr'
+-- vim.o.foldcolumn = '1' 
+-- vim.o.foldlevel = 99   
+-- vim.o.foldlevelstart = 99
+-- vim.o.foldenable = true
+-- vim.o.foldmethod = 'expr'
 
 require("toggleterm").setup {}
 
 require("better_escape").setup {
-    mapping = { "jj" },         -- a table with mappings to use
-    timeout = vim.o.timeoutlen, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
-    clear_empty_lines = false,  -- clear line after escaping if there is only whitespace
-    keys = "<Esc>",             -- keys used for escaping, if it is a function will use the result everytime
+    mapping = { "jj" },         
+    timeout = vim.o.timeoutlen, 
+    clear_empty_lines = false,  
+    keys = "<Esc>",             
 }
 require("barbecue.ui").toggle(false)
 require 'telescope'.load_extension('project')
--- if not package.loaded['cmp-cmdline-history'] then
---     cmp.setup.cmdline(':', {
---         sources = {
---             { name = 'cmdline_history' },
---         },
---     })
--- end
--- require("obsidian").setup({})
+
 vim.g.vim_markdown_frontmatter = 1
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "markdown", "markdown_inline", "lua", "python" },
@@ -178,7 +170,7 @@ require("nvim-treesitter.configs").setup({
     enable = true,
     additional_vim_regex_highlighting = { "markdown" },
     disable = function(lang, bufnr) 
-      return vim.api.nvim_buf_line_count(bufnr) > 50000
+      return vim.api.nvim_buf_line_count(bufnr) > 100
     end,
   },
 })
@@ -193,28 +185,9 @@ end, { noremap = false, expr = true })
 
 ----------------------------------------------------------------------------
 require("cheatsheet").setup({
-    -- Whether to show bundled cheatsheets
-
-    -- For generic cheatsheets like default, unicode, nerd-fonts, etc
-    -- bundled_cheatsheets = {
-    --     enabled = {},
-    --     disabled = {},
-    -- },
     bundled_cheatsheets = true,
-
-    -- For plugin specific cheatsheets
-    -- bundled_plugin_cheatsheets = {
-    --     enabled = {},
-    --     disabled = {},
-    -- }
     bundled_plugin_cheatsheets = true,
-
-    -- For bundled plugin cheatsheets, do not show a sheet if you
-    -- don't have the plugin installed (searches runtimepath for
-    -- same directory name)
     include_only_installed_plugins = true,
-
-    -- Key mappings bound inside the telescope window
     telescope_mappings = {
         ['<CR>'] = require('cheatsheet.telescope.actions').select_or_fill_commandline,
         ['<A-CR>'] = require('cheatsheet.telescope.actions').select_or_execute,
@@ -223,3 +196,33 @@ require("cheatsheet").setup({
     }
 })
 require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+require("nvim-dap-virtual-text").setup()
+------------------------------------------------------------------------------
+-- local builtin = require("statuscol.builtin")
+-- require("statuscol").setup({
+--   relculright = true,
+--   segments = {
+--     {
+--       sign = { name = { "Diagnostic" }, maxwidth = 2, auto = true },
+--       click = "v:lua.ScSa"
+--     },
+--     { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+--     { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+--     {
+--       sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = true },
+--       click = "v:lua.ScSa"
+--     },
+--   }
+-- })
+-- require("hlslens").setup({
+--     build_position_cb = function(plist, bufnr, changedtick, pattern)
+--         require('scrollbar').search_handler.show(plist.start_pos)
+--     end
+-- })
+
+-- vim.cmd([[
+--     augroup scrollbar_search_hide
+--       autocmd!
+--       autocmd CmdlineLeave : lua require('scrollbar').search_handler.hide()
+--     augroup END
+-- ]])
