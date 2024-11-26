@@ -1,2 +1,2 @@
-# dotfiles_config
-my Ubuntu ~/.config folder
+# dotfiles
+my Ubuntu ~/ dot files
